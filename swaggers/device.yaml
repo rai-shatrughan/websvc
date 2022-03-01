@@ -1,0 +1,71 @@
+    swagger: "2.0"
+    info:
+      title: API service for Devices
+      description: Define and retrieve Device Info.
+      version: 1.0.0
+    host: "localhost:8080"
+    basePath: /api/v1
+    schemes:
+      - https
+      - http
+    security:
+     - apiKey: []
+    paths:
+      /device/version:
+        get:
+          summary: Returns current api version.
+          produces:
+            - application/json
+          responses:
+            200:
+              description: OK
+      /device/{deviceId}:
+        get:
+          summary: Returns a device by ID.
+          parameters:
+            - in: path
+              name: deviceId
+              required: true
+              type: string
+              format: uuid
+              minimum: 1
+          responses:
+            200:
+              description: A Device object.
+              schema:
+                $ref: '#/definitions/device'
+            400:
+              description: The specified device ID is invalid (e.g. not a number).
+            404:
+              description: A device with the specified ID was not found.
+            default:
+              description: Unexpected error
+              
+    securityDefinitions:
+      apiKey:
+        type: apiKey
+        in: header
+        name: X-API-Key
+    
+    definitions:
+      device:
+        properties:
+          id:
+            type: string
+            format: uuid
+            example: 5ca0f5e4-ac05-4480-9ee0-e896a22b827a
+          name:
+            type: string
+            example: Assembly device 
+          location:
+            type: string
+            example: Atlantic Bay
+          status:
+            type: string
+            example: active | offline
+        # All properties are required
+        required:  
+          - id
+          - name
+          - location
+          - status

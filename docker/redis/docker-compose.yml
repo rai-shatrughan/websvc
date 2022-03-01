@@ -1,0 +1,18 @@
+version: '2'
+
+services:
+  redis1:
+    image: 'bitnami/redis:latest'
+    container_name: redis1
+    environment:
+      - REDIS_PASSWORD=password123
+    expose:
+      - 6379
+    networks:
+      sr_cluster_network:
+        ipv4_address: ${REDIS1_IP}
+
+
+networks:
+  sr_cluster_network:
+    external: true

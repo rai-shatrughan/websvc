@@ -1,0 +1,42 @@
+    swagger: "2.0"
+    info:
+      title: API service for login
+      description: Retrieve session Info.
+      version: 1.0.0
+    host: "localhost:8080"
+    basePath: /api/v1/auth
+    schemes:
+      - https
+      - http
+    paths:
+      /login:
+        post:
+          summary: Returns sessionId.
+          parameters:
+            - in: header
+              name: X-Tenant-Name
+              required: true
+              type: string
+          security:
+            - basicAuth: []
+          produces:
+            - application/json
+          responses:
+            200:
+              description: OK
+      /logout:
+        post:
+          summary: Clear a session.
+          parameters:
+            - in: header
+              name: X-XSRF-TOKEN
+              required: true
+              type: string
+              format: uuid
+              minimum: 1
+          responses:
+            200:
+              description: A Device object.
+    securityDefinitions:
+      basicAuth:
+        type: basic

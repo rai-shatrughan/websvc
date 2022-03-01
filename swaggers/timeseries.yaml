@@ -1,0 +1,105 @@
+    swagger: "2.0"
+    info:
+      title: API service for TimeSeries
+      description: Define and retrieve TimeSeries data for your devices.
+      version: 1.0.0
+    host: "localhost:8080"
+    basePath: /api/v1
+    schemes:
+      - https
+      - http
+    security:
+     - apiKey: []
+    paths:
+      /timeseries/version:
+        get:
+          summary: Returns current api version.
+          produces:
+            - application/json
+          responses:
+            200:
+              description: OK
+      /timeseries/{deviceId}:
+        put:
+          summary: push timeseries data from a device by ID.
+          parameters:
+            - in: path
+              name: deviceId
+              required: true
+              type: string
+              format: uuid
+              minimum: 1
+            - in: body
+              name: timeseries
+              description: timeseries data.
+              required: true
+              schema:
+                $ref: '#/definitions/timeseriesArray' 
+          responses:
+            200:
+              description: Timeseries was pushed.
+            400:
+              description: The specified device ID is invalid (e.g. not a number).
+            404:
+              description: A device with the specified ID was not found.
+            default:
+              description: Unexpected error
+        get:
+          summary: get timeseries data for a device by ID.
+          parameters:
+            - in: path
+              name: deviceId
+              required: true
+              type: string
+              format: uuid
+              minimum: 1
+            - in: query
+              name: duration
+              type: string
+              required: true
+              description: query timeseries data by duration - 1s, 1m, 1h, 1d, 1w, 1M, 1y.
+          responses:
+            200:
+              description: timeseries data.
+            400:
+              description: The specified device ID is invalid (e.g. not a number).
+            404:
+              description: A device with the specified ID was not found.
+            default:
+              description: Unexpected error
+              
+    securityDefinitions:
+      apiKey:
+        type: apiKey
+        in: header
+        name: X-API-Key
+    
+    definitions:
+      timeseries:
+        type: object
+        properties:
+          timestamp:
+            type: string
+            description: Timestamp of the data points.
+            example: "2017-07-21T17:32:28Z"
+            format: date-time
+          property:
+            type: string
+            example: temperature
+          unit:
+            type: string
+            example: celcius 
+          value:
+            type: number
+            format: double
+            example: 100.01
+        # All properties are required
+        required:  
+          - timestamp
+          - property
+          - unit
+          - value
+      timeseriesArray:
+        type: array
+        items:
+          $ref: '#/definitions/timeseries' 

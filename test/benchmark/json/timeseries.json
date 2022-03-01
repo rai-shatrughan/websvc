@@ -1,0 +1,13 @@
+[{
+    "timestamp": "2017-07-21T17:32:28Z",
+    "property": "temperature",
+    "unit": "celcius",
+    "value": 80
+},
+{
+    "timestamp": "2017-07-21T17:32:28Z",
+    "property": "pressure",
+    "unit": "ton",
+    "value": 20
+}
+]

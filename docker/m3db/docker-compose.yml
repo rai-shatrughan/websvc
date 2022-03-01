@@ -1,0 +1,25 @@
+version: '2'
+
+services:
+  m3db1:
+    image: 'quay.io/m3db/m3dbnode:v1.0.0'
+    container_name: m3db1
+    volumes:
+      - m3db:/var/lib/m3db
+    expose:
+      - 7201
+      - 7203
+    networks:
+      sr_cluster_network:
+        ipv4_address: ${M3DB1_IP}
+
+volumes:
+    m3db:
+      driver: local
+      driver_opts:
+        o: bind
+        device: /data/m3db
+
+networks:
+  sr_cluster_network:
+    external: true
