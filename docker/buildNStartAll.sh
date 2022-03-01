@@ -6,15 +6,16 @@
     sr_cluster_network
 
 # components=("kafka" "etcd" "redis" "grafana" "m3db" "flink" "druid")
-components=("kafka" "etcd" "redis" "m3db" "grafana")
+#components=("kafka" "etcd" "redis" "m3db" "grafana")
+components=("etcd" "m3db" "grafana")
 
 for comp in ${components[@]}; do
     docker-compose -f $comp/docker-compose.yml down
 done
 
 root_path=/data
-#data_folders=("etcd1" "etcd2" "etcd3" "zk1" "zk2" "zk3" "kfk1" "kfk2" "kfk3" "m3db" "grafana" "flink" "druid")
-data_folders=("etcd1" "etcd2" "etcd3" "zk1" "zk2" "zk3" "kfk1" "kfk2" "kfk3" "m3db" "grafana")
+#data_folders=("etcd1" "etcd2" "etcd3" "zk1" "zk2" "zk3" "kfk1" "kfk2" "kfk3" "m3db1" "m3db2" "m3db3" "grafana")
+data_folders=("etcd1" "etcd2" "etcd3" "m3db1" "m3db2" "m3db3" "m3c1")
 
 for dir in ${data_folders[@]}; do
     wd=$root_path/$dir
@@ -24,7 +25,9 @@ for dir in ${data_folders[@]}; do
         sudo rm -rf $wd
     fi
     
-    mkdir -p $wd
+    sudo mkdir -p $wd
+    sudo chown nobody:nogroup $wd
+    sudo chmod 777 $wd -R
 done
 
 

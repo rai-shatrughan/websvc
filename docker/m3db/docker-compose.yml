@@ -5,7 +5,8 @@ services:
     image: 'quay.io/m3db/m3dbnode:v1.0.0'
     container_name: m3db1
     volumes:
-      - m3db:/var/lib/m3db
+      - m3db1:/var/lib/m3db
+      - ./conf/m3dbnode.yml:/etc/m3dbnode/m3dbnode.yml
     expose:
       - 7201
       - 7203
@@ -13,13 +14,67 @@ services:
       sr_cluster_network:
         ipv4_address: ${M3DB1_IP}
 
+  m3db2:
+    image: 'quay.io/m3db/m3dbnode:v1.0.0'
+    container_name: m3db2
+    volumes:
+      - m3db2:/var/lib/m3db
+      - ./conf/m3dbnode.yml:/etc/m3dbnode/m3dbnode.yml
+    expose:
+      - 7201
+      - 7203
+    networks:
+      sr_cluster_network:
+        ipv4_address: ${M3DB2_IP}
+        
+  m3db3:
+    image: 'quay.io/m3db/m3dbnode:v1.0.0'
+    container_name: m3db3
+    volumes:
+      - m3db3:/var/lib/m3db
+      - ./conf/m3dbnode.yml:/etc/m3dbnode/m3dbnode.yml
+    expose:
+      - 7201
+      - 7203
+    networks:
+      sr_cluster_network:
+        ipv4_address: ${M3DB3_IP}
+
+  m3c1:
+    image: 'quay.io/m3db/m3coordinator:v1.0.0'
+    container_name: m3c1
+    volumes:
+      - m3c1:/var/lib/m3kv
+      - ./conf/m3coordinator.yml:/etc/m3coordinator/m3coordinator.yml
+    expose:
+      - 7201
+      - 7203
+    networks:
+      sr_cluster_network:
+        ipv4_address: ${M3C1_IP}
+
+
 volumes:
-    m3db:
+    m3db1:
       driver: local
       driver_opts:
         o: bind
-        device: /data/m3db
-
+        device: /data/m3db1
+    m3db2:
+      driver: local
+      driver_opts:
+        o: bind
+        device: /data/m3db2
+    m3db3:
+      driver: local
+      driver_opts:
+        o: bind
+        device: /data/m3db3
+    m3c1:
+      driver: local
+      driver_opts:
+        o: bind
+        device: /data/m3c1
 networks:
   sr_cluster_network:
     external: true

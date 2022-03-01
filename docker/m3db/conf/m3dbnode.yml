@@ -1,0 +1,32 @@
+coordinator:
+  local:
+    namespaces:
+      - namespace: default
+        type: unaggregated
+        retention: 48h
+
+db:
+  hostID:
+    resolver: hostname
+  
+  discovery:  
+    config:
+      service: 
+        env: default_env
+        zone: embedded
+        service: m3db
+        cacheDir: /var/lib/m3kv
+        etcdClusters:
+          - zone: embedded
+            endpoints:
+            - 172.18.0.71:2379
+            - 172.18.0.72:2379
+            - 172.18.0.73:2379
+      seedNodes:
+        initialCluster:
+          - hostID: host1
+            endpoint: http://172.18.0.71:2380
+          - hostID: host2
+            endpoint: http://172.18.0.72:2380
+          - hostID: host3
+            endpoint: http://172.18.0.73:2380
