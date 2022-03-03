@@ -13,4 +13,6 @@ go run timeseries/cmd/timeseries-server/main.go --host 0.0.0.0 --port 8002 --sch
 #go run gateway/gateway.go &
 go run gateway/lugat/main.go &
 
+go run middleware/writer/ts_writer.go &
+
 wait
