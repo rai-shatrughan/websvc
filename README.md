@@ -20,5 +20,5 @@ How to start:
 > - once script finishes you will see few docker conatiners like kafka,zookeeper,etcd up n running.
 > - drop into project root directory
 > - run "bash startWebsvc.sh"
-> - services are available at 8000 port
+> - services are available at 8080 port
 > - swagger specs are available at *swaggers* dir
