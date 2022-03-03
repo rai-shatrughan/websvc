@@ -18,7 +18,6 @@ var (
 	maxBytes       int = 10e6
 	startOffset        = kafka.LastOffset
 	logger             = Logger{}
-	quitStreamRead chan bool
 )
 
 func init() {
@@ -35,7 +34,7 @@ type kafkaBase struct {
 	GroupID     *string
 	MinBytes    *int
 	MaxBytes    *int
-	StartOffset *int64
+	StartOffset *int64	
 }
 
 //KafkaReaders wraps kafka.Reader
@@ -53,7 +52,6 @@ type KafkaWriter struct {
 func (kf *kafkaBase) fillDefaults() {
 	if len(kf.Brokers) == 0 {
 		kf.Brokers = make([]string, len(brokers))
-		quitStreamRead = make(chan bool, len(brokers))
 	}
 
 	if kf.Brokers[0] == "" {
@@ -111,30 +109,7 @@ func (kf *KafkaWriter) New() {
 	kf.setupCloseWriterHandler()
 }
 
-//ReadStream returns kafka Message
-func (kf *KafkaReaders) ReadStream(reader *kafka.Reader, kafkaMsgChan chan<- kafka.Message) {
-	for {
-		select {
-		case <-quitStreamRead:
-			logger.Info("GOT TO QUIT********************")
-			return
-		default:
-			var start time.Time
-			var elapsed time.Duration
-			start = time.Now()
-			msg, err := reader.ReadMessage(context.Background())
-			if err != nil {
-				logger.Error("Error in Reading msg from Kafka ", zap.Error(err))
-			}
-			elapsed = time.Since(start)
-			logger.Info("Kafka Read", zap.Duration("duration", elapsed))
-			kafkaMsgChan <- msg
-		}
-	}
-
-}
-
-//ReadStream returns kafka Message
+//Read returns kafka Message
 func (kf *KafkaReaders) Read(reader *kafka.Reader) kafka.Message {
 
 	logger.Info("Reading message from group",
@@ -210,10 +185,7 @@ func (kf *KafkaReaders) closeReaders() {
 		if err := kf.Readers[i].Close(); err != nil {
 			logger.Error("Failed to close kafka reader", zap.Error(err))
 		}
-		quitStreamRead <- true
 	}
-
-	close(quitStreamRead)
 
 }
 
