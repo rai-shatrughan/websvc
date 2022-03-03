@@ -5,17 +5,20 @@
     --subnet=172.18.0.0/23 \
     sr_cluster_network
 
-# components=("kafka" "etcd" "redis" "grafana" "m3db" "flink" "druid")
-#components=("kafka" "etcd" "redis" "m3db" "grafana")
-components=("etcd" "m3db" "grafana")
+echo "downloading kafka binary 1st time only"
+cd kafka
+bash download.sh
+
+cd ..
+
+components=("kafka" "etcd" "redis")
 
 for comp in ${components[@]}; do
     docker-compose -f $comp/docker-compose.yml down
 done
 
 root_path=/data
-#data_folders=("etcd1" "etcd2" "etcd3" "zk1" "zk2" "zk3" "kfk1" "kfk2" "kfk3" "m3db1" "m3db2" "m3db3" "grafana")
-data_folders=("etcd1" "etcd2" "etcd3" "m3db1" "m3db2" "m3db3" "m3c1")
+data_folders=("etcd1" "etcd2" "etcd3" "zk1" "zk2" "zk3" "kfk1" "kfk2" "kfk3")
 
 for dir in ${data_folders[@]}; do
     wd=$root_path/$dir
@@ -40,6 +43,3 @@ done
 echo "sleeping for creating topic 5s"
 sleep 5
 bash kafka/createTopic.sh
-
-echo "m3db detup namespace"
-bash m3db/m3dbTest.sh
