@@ -12,7 +12,8 @@ It has three light weight microservices
 
 How to start:
 > - Install docker and docker-compose if not installed
-> - create a "/data" directory and give following permission
+> - create a "/data" directory and give following permission 
+> `this directory is used for data persistence from docker containers`
 > - "sudo chown nobody:nogroup /data/"
 > - run following command "cd docker; bash buildNStartAll.sh" 
 `Note - dropping into docker directory is important. docker-compose will look for a .env file which is present into docker dir.`
