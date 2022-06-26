@@ -1,21 +1,20 @@
 ---
-version: '2'
+version: "2"
 services:
-
   zookeeper1:
     build: .
     image: mykafka
     container_name: zookeeper1
     volumes:
-      - zk1:/tmp
+      - /data/zk1:/tmp
     command: >
-        bash -c "sed -i 's/SR_ZOOKEEPER_SERVER_1/${KAFKA_ZOOKEEPER1_IP}/g' /opt/${KAFKA_DIR}/config/zookeeper.properties &&
-             sed -i 's/SR_ZOOKEEPER_SERVER_2/${KAFKA_ZOOKEEPER2_IP}/g' /opt/${KAFKA_DIR}/config/zookeeper.properties &&
-             sed -i 's/SR_ZOOKEEPER_SERVER_3/${KAFKA_ZOOKEEPER3_IP}/g' /opt/${KAFKA_DIR}/config/zookeeper.properties && 
-             mkdir -p /tmp/zookeeper/ &&
-             touch /tmp/zookeeper/myid &&
-             echo "1" > /tmp/zookeeper/myid &&
-             nohup bin/zookeeper-server-start.sh config/zookeeper.properties"  
+      bash -c "sed -i 's/SR_ZOOKEEPER_SERVER_1/${KAFKA_ZOOKEEPER1_IP}/g' /opt/${KAFKA_DIR}/config/zookeeper.properties &&
+           sed -i 's/SR_ZOOKEEPER_SERVER_2/${KAFKA_ZOOKEEPER2_IP}/g' /opt/${KAFKA_DIR}/config/zookeeper.properties &&
+           sed -i 's/SR_ZOOKEEPER_SERVER_3/${KAFKA_ZOOKEEPER3_IP}/g' /opt/${KAFKA_DIR}/config/zookeeper.properties && 
+           mkdir -p /tmp/zookeeper/ &&
+           touch /tmp/zookeeper/myid &&
+           echo "1" > /tmp/zookeeper/myid &&
+           nohup bin/zookeeper-server-start.sh config/zookeeper.properties"
     expose:
       - "2181"
       - "2888"
@@ -23,21 +22,21 @@ services:
     networks:
       sr_cluster_network:
         ipv4_address: ${KAFKA_ZOOKEEPER1_IP}
-  
+
   zookeeper2:
     build: .
     image: mykafka
     container_name: zookeeper2
     volumes:
-      - zk2:/tmp
+      - /data/zk2:/tmp
     command: >
-        bash -c "sed -i 's/SR_ZOOKEEPER_SERVER_1/${KAFKA_ZOOKEEPER1_IP}/g' /opt/${KAFKA_DIR}/config/zookeeper.properties &&
-             sed -i 's/SR_ZOOKEEPER_SERVER_2/${KAFKA_ZOOKEEPER2_IP}/g' /opt/${KAFKA_DIR}/config/zookeeper.properties &&
-             sed -i 's/SR_ZOOKEEPER_SERVER_3/${KAFKA_ZOOKEEPER3_IP}/g' /opt/${KAFKA_DIR}/config/zookeeper.properties && 
-             mkdir -p /tmp/zookeeper/ &&
-             touch /tmp/zookeeper/myid &&
-             echo "2" > /tmp/zookeeper/myid &&
-             nohup bin/zookeeper-server-start.sh config/zookeeper.properties"    
+      bash -c "sed -i 's/SR_ZOOKEEPER_SERVER_1/${KAFKA_ZOOKEEPER1_IP}/g' /opt/${KAFKA_DIR}/config/zookeeper.properties &&
+           sed -i 's/SR_ZOOKEEPER_SERVER_2/${KAFKA_ZOOKEEPER2_IP}/g' /opt/${KAFKA_DIR}/config/zookeeper.properties &&
+           sed -i 's/SR_ZOOKEEPER_SERVER_3/${KAFKA_ZOOKEEPER3_IP}/g' /opt/${KAFKA_DIR}/config/zookeeper.properties && 
+           mkdir -p /tmp/zookeeper/ &&
+           touch /tmp/zookeeper/myid &&
+           echo "2" > /tmp/zookeeper/myid &&
+           nohup bin/zookeeper-server-start.sh config/zookeeper.properties"
     expose:
       - "2181"
       - "2888"
@@ -45,21 +44,21 @@ services:
     networks:
       sr_cluster_network:
         ipv4_address: ${KAFKA_ZOOKEEPER2_IP}
-  
+
   zookeeper3:
     build: .
     image: mykafka
     container_name: zookeeper3
     volumes:
-      - zk3:/tmp
+      - /data/zk3:/tmp
     command: >
-        bash -c "sed -i 's/SR_ZOOKEEPER_SERVER_1/${KAFKA_ZOOKEEPER1_IP}/g' /opt/${KAFKA_DIR}/config/zookeeper.properties &&
-             sed -i 's/SR_ZOOKEEPER_SERVER_2/${KAFKA_ZOOKEEPER2_IP}/g' /opt/${KAFKA_DIR}/config/zookeeper.properties &&
-             sed -i 's/SR_ZOOKEEPER_SERVER_3/${KAFKA_ZOOKEEPER3_IP}/g' /opt/${KAFKA_DIR}/config/zookeeper.properties && 
-             mkdir -p /tmp/zookeeper/ &&
-             touch /tmp/zookeeper/myid &&
-             echo "3" > /tmp/zookeeper/myid &&
-             nohup bin/zookeeper-server-start.sh config/zookeeper.properties"   
+      bash -c "sed -i 's/SR_ZOOKEEPER_SERVER_1/${KAFKA_ZOOKEEPER1_IP}/g' /opt/${KAFKA_DIR}/config/zookeeper.properties &&
+           sed -i 's/SR_ZOOKEEPER_SERVER_2/${KAFKA_ZOOKEEPER2_IP}/g' /opt/${KAFKA_DIR}/config/zookeeper.properties &&
+           sed -i 's/SR_ZOOKEEPER_SERVER_3/${KAFKA_ZOOKEEPER3_IP}/g' /opt/${KAFKA_DIR}/config/zookeeper.properties && 
+           mkdir -p /tmp/zookeeper/ &&
+           touch /tmp/zookeeper/myid &&
+           echo "3" > /tmp/zookeeper/myid &&
+           nohup bin/zookeeper-server-start.sh config/zookeeper.properties"
     expose:
       - "2181"
       - "2888"
@@ -68,18 +67,17 @@ services:
       sr_cluster_network:
         ipv4_address: ${KAFKA_ZOOKEEPER3_IP}
 
-
   kafka1:
     build: .
     image: mykafka
     container_name: kafka1
     volumes:
-      - kfk1:/tmp 
+      - /data/kfk1:/tmp
     command: >
-        bash -c "sudo sed -i 's/SR_BROKER_ID/1/g' /opt/${KAFKA_DIR}/config/server.properties &&
-             sudo sed -i 's/SR_BROKER_LISTENERS_HOST_PORT/${KAFKA1_IP}:9092/g' /opt/${KAFKA_DIR}/config/server.properties &&
-             sudo sed -i 's/SR_ZOOKEEPER_HOST_PORT/${KAFKA_ZOOKEEPER1_IP}:2181,${KAFKA_ZOOKEEPER2_IP}:2181,${KAFKA_ZOOKEEPER3_IP}:2181/g' /opt/${KAFKA_DIR}/config/server.properties &&
-             nohup bin/kafka-server-start.sh config/server.properties"  
+      bash -c "sudo sed -i 's/SR_BROKER_ID/1/g' /opt/${KAFKA_DIR}/config/server.properties &&
+           sudo sed -i 's/SR_BROKER_LISTENERS_HOST_PORT/${KAFKA1_IP}:9092/g' /opt/${KAFKA_DIR}/config/server.properties &&
+           sudo sed -i 's/SR_ZOOKEEPER_HOST_PORT/${KAFKA_ZOOKEEPER1_IP}:2181,${KAFKA_ZOOKEEPER2_IP}:2181,${KAFKA_ZOOKEEPER3_IP}:2181/g' /opt/${KAFKA_DIR}/config/server.properties &&
+           nohup bin/kafka-server-start.sh config/server.properties"
     expose:
       - "9092"
     networks:
@@ -91,66 +89,34 @@ services:
     image: mykafka
     container_name: kafka2
     volumes:
-      - kfk2:/tmp
+      - /data/kfk2:/tmp
     command: >
-        bash -c "sudo sed -i 's/SR_BROKER_ID/2/g' /opt/${KAFKA_DIR}/config/server.properties &&
-             sudo sed -i 's/SR_BROKER_LISTENERS_HOST_PORT/${KAFKA2_IP}:9092/g' /opt/${KAFKA_DIR}/config/server.properties &&
-             sudo sed -i 's/SR_ZOOKEEPER_HOST_PORT/${KAFKA_ZOOKEEPER1_IP}:2181,${KAFKA_ZOOKEEPER2_IP}:2181,${KAFKA_ZOOKEEPER3_IP}:2181/g' /opt/${KAFKA_DIR}/config/server.properties &&
-             nohup bin/kafka-server-start.sh config/server.properties"   
+      bash -c "sudo sed -i 's/SR_BROKER_ID/2/g' /opt/${KAFKA_DIR}/config/server.properties &&
+           sudo sed -i 's/SR_BROKER_LISTENERS_HOST_PORT/${KAFKA2_IP}:9092/g' /opt/${KAFKA_DIR}/config/server.properties &&
+           sudo sed -i 's/SR_ZOOKEEPER_HOST_PORT/${KAFKA_ZOOKEEPER1_IP}:2181,${KAFKA_ZOOKEEPER2_IP}:2181,${KAFKA_ZOOKEEPER3_IP}:2181/g' /opt/${KAFKA_DIR}/config/server.properties &&
+           nohup bin/kafka-server-start.sh config/server.properties"
     expose:
       - "9092"
     networks:
       sr_cluster_network:
         ipv4_address: ${KAFKA2_IP}
-  
+
   kafka3:
     build: .
-    image: mykafka    
+    image: mykafka
     container_name: kafka3
     volumes:
-      - kfk3:/tmp
+      - /data/kfk3:/tmp
     command: >
-        bash -c "sudo sed -i 's/SR_BROKER_ID/3/g' /opt/${KAFKA_DIR}/config/server.properties &&
-             sudo sed -i 's/SR_BROKER_LISTENERS_HOST_PORT/${KAFKA3_IP}:9092/g' /opt/${KAFKA_DIR}/config/server.properties &&
-             sudo sed -i 's/SR_ZOOKEEPER_HOST_PORT/${KAFKA_ZOOKEEPER1_IP}:2181,${KAFKA_ZOOKEEPER2_IP}:2181,${KAFKA_ZOOKEEPER3_IP}:2181/g' /opt/${KAFKA_DIR}/config/server.properties &&
-             nohup bin/kafka-server-start.sh config/server.properties"  
+      bash -c "sudo sed -i 's/SR_BROKER_ID/3/g' /opt/${KAFKA_DIR}/config/server.properties &&
+           sudo sed -i 's/SR_BROKER_LISTENERS_HOST_PORT/${KAFKA3_IP}:9092/g' /opt/${KAFKA_DIR}/config/server.properties &&
+           sudo sed -i 's/SR_ZOOKEEPER_HOST_PORT/${KAFKA_ZOOKEEPER1_IP}:2181,${KAFKA_ZOOKEEPER2_IP}:2181,${KAFKA_ZOOKEEPER3_IP}:2181/g' /opt/${KAFKA_DIR}/config/server.properties &&
+           nohup bin/kafka-server-start.sh config/server.properties"
     expose:
       - "9092"
     networks:
       sr_cluster_network:
         ipv4_address: ${KAFKA3_IP}
-
-volumes:
-    zk1:
-      driver: local
-      driver_opts:
-        o: bind
-        device: /data/zk1
-    zk2:
-      driver: local
-      driver_opts:
-        o: bind
-        device: /data/zk2
-    zk3:
-      driver: local
-      driver_opts:
-        o: bind
-        device: /data/zk3
-    kfk1:
-      driver: local
-      driver_opts:
-        o: bind
-        device: /data/kfk1
-    kfk2:
-      driver: local
-      driver_opts:
-        o: bind
-        device: /data/kfk2
-    kfk3:
-      driver: local
-      driver_opts:
-        o: bind
-        device: /data/kfk3
 
 networks:
   sr_cluster_network:

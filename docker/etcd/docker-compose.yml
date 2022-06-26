@@ -1,67 +1,50 @@
-version: '2'
+version: "2"
 
 services:
   etcd1:
-    image: 'bitnami/etcd:latest'
+    image: "bitnami/etcd:latest"
     container_name: etcd1
     environment:
       - ALLOW_NONE_AUTHENTICATION=yes
       - ETCD_ADVERTISE_CLIENT_URLS=http://${ETCD1_IP}:2379,http://${ETCD2_IP}:2379,http://${ETCD3_IP}:2379
     volumes:
-      - etcd1:/bitnami/etcd
+      - /data/etcd1:/bitnami/etcd
     expose:
       - 2379
       - 2380
     networks:
       sr_cluster_network:
         ipv4_address: ${ETCD1_IP}
-  
+
   etcd2:
-    image: 'bitnami/etcd:latest'
+    image: "bitnami/etcd:latest"
     container_name: etcd2
     environment:
       - ALLOW_NONE_AUTHENTICATION=yes
       - ETCD_ADVERTISE_CLIENT_URLS=http://${ETCD1_IP}:2379,http://${ETCD2_IP}:2379,http://${ETCD3_IP}:2379
     volumes:
-      - etcd2:/bitnami/etcd
+      - /data/etcd2:/bitnami/etcd
     expose:
       - 2379
       - 2380
     networks:
       sr_cluster_network:
         ipv4_address: ${ETCD2_IP}
-  
+
   etcd3:
-    image: 'bitnami/etcd:latest'
+    image: "bitnami/etcd:latest"
     container_name: etcd3
     environment:
       - ALLOW_NONE_AUTHENTICATION=yes
       - ETCD_ADVERTISE_CLIENT_URLS=http://${ETCD1_IP}:2379,http://${ETCD2_IP}:2379,http://${ETCD3_IP}:2379
     volumes:
-      - etcd3:/bitnami/etcd
+      - /data/etcd3:/bitnami/etcd
     expose:
       - 2379
       - 2380
     networks:
       sr_cluster_network:
         ipv4_address: ${ETCD3_IP}
-
-volumes:
-    etcd1:
-      driver: local
-      driver_opts:
-        o: bind
-        device: /data/etcd1
-    etcd2:
-      driver: local
-      driver_opts:
-        o: bind
-        device: /data/etcd2
-    etcd3:
-      driver: local
-      driver_opts:
-        o: bind
-        device: /data/etcd3
 
 networks:
   sr_cluster_network:
