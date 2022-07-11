@@ -8,10 +8,10 @@ import (
 	"github.com/gavv/httpexpect/v2"
 )
 
-var baseURL = "http://localhost:8080/api/v1/device"
+var devBaseURL = "http://localhost:8080/api/v1/device"
 
 func TestDeviceVersion(t *testing.T) {
-	e := httpexpect.New(t, baseURL)
+	e := httpexpect.New(t, devBaseURL)
 
 	obj := e.GET("/version").
 		WithHeader("X-API-Key", "srkey12345").
@@ -27,7 +27,7 @@ func TestDeviceVersion(t *testing.T) {
 }
 
 func TestDeviceId(t *testing.T) {
-	e := httpexpect.New(t, baseURL)
+	e := httpexpect.New(t, devBaseURL)
 
 	obj := e.GET("/6fdae6af-226d-48bd-8b61-699758137eb3").
 		WithHeader("X-API-Key", "srkey12345").
